@@ -1,0 +1,55 @@
+<html>
+  <head>
+    <title>Lähetä viesti</title>
+<!--    <script src="jquery-3.6.0.js"></script> -->
+<script
+  src="https://code.jquery.com/jquery-3.6.0.js"
+  integrity="sha256-H+K7U5CnXl1h5ywQfKtSj8PCmoN9aaq30gDh27Xc0jk="
+  crossorigin="anonymous"></script>
+  </head>
+  <body>
+    <h1>Tervetuloa viestipalveluun!</h1>
+    <img style="width: 400px;" src="shark.jpg" alt="shark">
+    <hr>
+    <br>
+    <input type="text" id="viesti"/>
+    <button>Lähetä viesti</button> 
+  <hr>
+  <h2>Viestit</h2>
+    <div id="viestit"></div>
+  </body>
+  <script>
+    var hae_viestit = function() {
+      console.log("Haetaan viestejä palvelimelta.")
+      $.ajax(
+        {
+          type:'GET',
+          url: "http://localhost:3001/hae", 
+          success: function(result){
+            console.log(result)
+            $("#viestit").html(result.reverse().map( d => "<b>"+d.data+"</b>").join("<br>"))
+          
+      }});
+
+    }
+
+
+    $("body").ready( hae_viestit );
+
+
+    $("button").click(function(){
+      $.ajax(
+        {
+          type:'POST',
+          url: "http://localhost:3001/talleta", 
+          data: {"lause":$("#viesti").val()},
+          
+          success: function(result){
+    //        console.log(result)
+   //         $("#viestit").html(result.reverse().map( d => "<b>"+d.data+"</b>").join("<br>"))
+          hae_viestit();
+      }});
+});
+
+  </script>
+</html>
